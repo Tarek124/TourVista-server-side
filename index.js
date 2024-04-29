@@ -31,6 +31,11 @@ async function run() {
       .collection("countryCollection");
 
     app.get("/touristSpots", async (req, res) => {
+      const cursor = touristsSpotCollection.find().limit(6);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    app.get("/mylist", async (req, res) => {
       const cursor = touristsSpotCollection.find();
       const result = await cursor.toArray();
       res.send(result);
@@ -39,6 +44,12 @@ async function run() {
       const touristSpot = req.body;
       const result = await touristsSpotCollection.insertOne(touristSpot);
       res.send(result);
+    });
+
+    app.delete("/touristSpots/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await touristsSpotCollection.deleteOne(query);
     });
 
     app.get("/countries", async (req, res) => {
