@@ -35,6 +35,11 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+    app.get("/alltouristSpots", async (req, res) => {
+      const cursor = touristsSpotCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     app.get("/mylist", async (req, res) => {
       const cursor = touristsSpotCollection.find();
       const result = await cursor.toArray();
