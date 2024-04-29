@@ -45,11 +45,18 @@ async function run() {
       const result = await touristsSpotCollection.insertOne(touristSpot);
       res.send(result);
     });
-
+    app.get("/myData/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { email: id };
+      const cursor = touristsSpotCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     app.delete("/touristSpots/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await touristsSpotCollection.deleteOne(query);
+      res.send(result);
     });
 
     app.get("/countries", async (req, res) => {
