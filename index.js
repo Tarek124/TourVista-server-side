@@ -52,13 +52,47 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+    app.get("/update/:id", async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: new ObjectId(id) };
+      const result = await touristsSpotCollection.findOne(query);
+      res.send(result);
+    });
     app.delete("/touristSpots/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await touristsSpotCollection.deleteOne(query);
       res.send(result);
     });
+    app.put("/touristSpots/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedData = req.body;
 
+      const update = {
+        $set: {
+          tourists_spot_name: updatedData.tourists_spot_name,
+          country: updatedData.country,
+          location: updatedData.location,
+          short_description: updatedData.short_description,
+          average_cost: updatedData.average_cost,
+          totaVisitorsPerYear: updatedData.totaVisitorsPerYear,
+          photoURL: updatedData.photoURL,
+          seassonValue: updatedData.seassonValue,
+          travelTime: updatedData.travelTime,
+          email: updatedData.email,
+          name: updatedData.name,
+        },
+      };
+
+      const result = await touristsSpotCollection.updateOne(
+        filter,
+        update,
+        options
+      );
+      res.send(result);
+    });
     app.get("/countries", async (req, res) => {
       const cursor = countryCollection.find();
       const result = await cursor.toArray();
