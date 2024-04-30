@@ -29,7 +29,15 @@ async function run() {
     const countryCollection = client
       .db("TouristSpot")
       .collection("countryCollection");
+    const fqaCollection = client
+      .db("TouristSpot")
+      .collection("FQA");
 
+    app.get("/fqa", async (req, res) => {
+      const cursor = fqaCollection.find()
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     app.get("/touristSpots", async (req, res) => {
       const cursor = touristsSpotCollection.find().limit(6);
       const result = await cursor.toArray();
