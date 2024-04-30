@@ -9,7 +9,11 @@ const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@cluster
 
 // middleware
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://assignment-10-a5238.web.app"],
+  })
+);
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -20,7 +24,7 @@ const client = new MongoClient(uri, {
 });
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
 
     const touristsSpotCollection = client
       .db("TouristSpot")
@@ -29,12 +33,10 @@ async function run() {
     const countryCollection = client
       .db("TouristSpot")
       .collection("countryCollection");
-    const fqaCollection = client
-      .db("TouristSpot")
-      .collection("FQA");
+    const fqaCollection = client.db("TouristSpot").collection("FQA");
 
     app.get("/fqa", async (req, res) => {
-      const cursor = fqaCollection.find()
+      const cursor = fqaCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
